@@ -1,0 +1,15 @@
+[project]
+name = "qa-exercise"
+version = "0.1.0"
+description = "SDET Coding Exercise - FastAPI Proxy Server"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.116.1",
+    "httpx>=0.28.1",
+    "pydantic-settings>=2.10.1",
+    "uvicorn>=0.32.1",
+]
+
+[dependency-groups]
+dev = []
