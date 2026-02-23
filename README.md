@@ -7,8 +7,8 @@ Following are the technical requirements:
 1. The proxy expects a json request body
 2. The json body should always contain a key called "user" else it should throw an error and return 400
 3. The proxy expects a json response body from downstream server
-4. The response json body should always contain a key called "user" else it should throw an error and return 400.
-5. The "user" key from the response body will be removed
+4. The response json body from downstream server should always contain a key called "user" else it should throw an error and return 400.
+5. The "user" key from the response body will be removed and rest of the body will be returned from proxy server
 
 ## Requirements:
 
