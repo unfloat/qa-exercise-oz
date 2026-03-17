@@ -212,3 +212,63 @@ describe('REQ-4: Downstream response must contain "user" key', () => {
       });
     });
   });
+
+// 5. The "user" key from the response body will be removed and rest of the body will be returned from proxy server
+
+ describe('REQ-5: "user" key is removed from the proxy response', () => {
+    it('should remove "user" key and preserve other keys in the response', () => {
+      cy.configureMock({
+        body: { user: "john", token: "abc123xyz", expires_in: 3600 },
+      });
+
+      cy.request({
+        method: "POST",
+        url: "/api/login",
+        body: { user: 40, password: "12345" },
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body).to.not.have.property("user");
+        expect(response.body).to.have.property("token", "abc123xyz");
+        expect(response.body).to.have.property("expires_in", 3600);
+      });
+    });
+
+    it("should preserve all non-user keys in the response", () => {
+      cy.configureMock({
+        body: { user: "jane", name: "Jane", role: "admin", active: true },
+      });
+
+      cy.request({
+        method: "POST",
+        url: "/api/profile",
+        body: { user: 1 },
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body).to.not.have.property("user");
+        expect(response.body).to.deep.equal({
+          name: "Jane",
+          role: "admin",
+          active: true,
+        });
+      });
+    });
+
+    it('should return an empty object when downstream only returns "user"', () => {
+      cy.configureMock({
+        body: { user: "only-user" },
+      });
+
+      cy.request({
+        method: "POST",
+        url: "/api/test",
+        body: { user: 1 },
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body).to.not.have.property("user");
+        expect(Object.keys(response.body)).to.have.length(0);
+      });
+    });
+  });
+
+  
+
