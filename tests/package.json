@@ -1,0 +1,14 @@
+{
+  "name": "proxy-service-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cypress automation tests for the proxy service",
+  "scripts": {
+    "test": "cypress run",
+    "test:open": "cypress open"
+  },
+  "devDependencies": {
+    "cypress": "^15.12.0",
+    "express": "^5.2.1"
+  }
+}
