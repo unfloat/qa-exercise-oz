@@ -211,7 +211,6 @@ describe("Proxy Service", () => {
   });
 
   // 5. The "user" key from the response body will be removed and rest of the body will be returned from proxy server
-
   describe('REQ-5: "user" key is removed from the proxy response', () => {
     it('should remove "user" key and preserve other keys in the response', () => {
       cy.configureMock({
