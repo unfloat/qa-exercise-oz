@@ -165,3 +165,50 @@ describe("REQ-3: Proxy expects a JSON response from downstream", () => {
     });
   });
 });
+
+
+// 4. The response json body from downstream server should always contain a key called "user" else it should throw an error and return 400.
+describe('REQ-4: Downstream response must contain "user" key', () => {
+    it('should return 400 when downstream response is missing "user" key', () => {
+      cy.configureMock({
+        body: { token: "abc123", expires_in: 3600 },
+      });
+
+      cy.request({
+        method: "POST",
+        url: "/api/login",
+        body: { user: 40, password: "12345" },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.eq(400);
+        expect(response.body.detail).to.include("user");
+      });
+    });
+
+    it("should return 400 when downstream returns an empty JSON object", () => {
+      cy.configureMock({ body: {} });
+
+      cy.request({
+        method: "POST",
+        url: "/api/login",
+        body: { user: 40 },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.eq(400);
+      });
+    });
+
+    it('should succeed when downstream response contains "user" key', () => {
+      cy.configureMock({
+        body: { user: "john", token: "xyz789" },
+      });
+
+      cy.request({
+        method: "POST",
+        url: "/api/login",
+        body: { user: 40 },
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+      });
+    });
+  });
