@@ -112,3 +112,56 @@ describe("REQ-2: Request body must contain 'user' key", () => {
     });
   });
 });
+
+// 3. The proxy expects a json response body from downstream server
+describe("REQ-3: Proxy expects a JSON response from downstream", () => {
+  it("should handle a valid JSON response from downstream", () => {
+    cy.configureMock({
+      statusCode: 200,
+      body: { user: "test", data: "value" },
+    });
+
+    cy.request({
+      method: "POST",
+      url: "/api/data",
+      body: { user: 1 },
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+    });
+  });
+  it("should return an error when downstream returns non-JSON (plain text)", () => {
+    cy.configureMock({
+      useRawBody: true,
+      rawBody: "This is plain text, not JSON",
+      contentType: "text/plain",
+      statusCode: 200,
+    });
+
+    cy.request({
+      method: "POST",
+      url: "/api/data",
+      body: { user: 1 },
+      failOnStatusCode: false,
+    }).then((response) => {
+      expect(response.status).to.be.gte(400);
+    });
+  });
+
+  it("should return an error when downstream returns HTML", () => {
+    cy.configureMock({
+      useRawBody: true,
+      rawBody: "<html><body>Error</body></html>",
+      contentType: "text/html",
+      statusCode: 200,
+    });
+
+    cy.request({
+      method: "POST",
+      url: "/api/data",
+      body: { user: 1 },
+      failOnStatusCode: false,
+    }).then((response) => {
+      expect(response.status).to.be.gte(400);
+    });
+  });
+});
