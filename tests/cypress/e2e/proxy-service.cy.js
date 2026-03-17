@@ -266,8 +266,8 @@ describe("Proxy Service", () => {
       });
     });
   });
-});
 
+  
 
 // Proxy routing and forwarding behavior
 describe("Proxy routing and forwarding", () => {
@@ -328,4 +328,52 @@ describe("Proxy routing and forwarding", () => {
       });
     });
   });
+
+  // HTTP method handling
+describe("HTTP method handling (only POST allowed)", () => {
+    it("should return 405 for GET requests", () => {
+      cy.request({
+        method: "GET",
+        url: "/api/login",
+        failOnStatusCode: false,
+      }).then((resp) => {
+        expect(resp.status).to.eq(405);
+      });
+    });
+
+    it("should return 405 for PUT requests", () => {
+      cy.request({
+        method: "PUT",
+        url: "/api/login",
+        body: { user: 1 },
+        failOnStatusCode: false,
+      }).then((resp) => {
+        expect(resp.status).to.eq(405);
+      });
+    });
+
+    it("should return 405 for DELETE requests", () => {
+      cy.request({
+        method: "DELETE",
+        url: "/api/login",
+        failOnStatusCode: false,
+      }).then((resp) => {
+        expect(resp.status).to.eq(405);
+      });
+    });
+
+    it("should return 405 for PATCH requests", () => {
+      cy.request({
+        method: "PATCH",
+        url: "/api/login",
+        body: { user: 1 },
+        failOnStatusCode: false,
+      }).then((resp) => {
+        expect(resp.status).to.eq(405);
+      });
+    });
+  });
+
+});
+
 
