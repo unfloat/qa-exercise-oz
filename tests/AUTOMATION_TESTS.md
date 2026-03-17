@@ -4,11 +4,38 @@
 
 This directory contains end-to-end automation tests for the **Simple Proxy Service** built with Cypress. The tests validate all five technical requirements from the specification, plus additional proxy routing and HTTP method behavior.
 
+---
+
+## Architecture & Approach
+
+The proxy service sits between a client and a downstream server. To test it in isolation without depending on a real downstream service, the test suite spins up a **mock downstream server** (Express.js) that the proxy forwards requests to.
+
+```
+┌──────────┐       POST       ┌───────────────┐      Forwards      ┌─────────────────────┐
+│  Cypress  │  ──────────────> │  Proxy (8000)  │  ───────────────> │  Mock Downstream     │
+│  Tests    │  <────────────── │  (FastAPI)     │  <─────────────── │  (Express on 8085)   │
+└──────────┘    Response       └───────────────┘    JSON response   └─────────────────────┘
+                                                                      ▲
+                                                            /__mock/configure
+                                                            /__mock/reset
+                                                            /__mock/requests
+                                                                      │
+                                                              Cypress controls
+                                                              mock behavior
+                                                              via HTTP calls
+```
+
+The mock server exposes **admin endpoints** (`/__mock/*`) that Cypress calls directly (bypassing the proxy) to configure what the downstream returns for each test. This gives each test full control over the downstream behavior.
+
+---
+
 ## Prerequisites
 
 1. **Node.js** (v18 or later)
 2. **Python 3.12** with `uv` installed (to run the proxy service)
 3. The proxy service dependencies installed: run `uv sync` from the project root
+
+
 
 ## How to Run
 
