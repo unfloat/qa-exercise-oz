@@ -1,0 +1,36 @@
+{
+  "validJson": {
+    "statusCode": 200,
+    "body": { "user": "test", "data": "value" }
+  },
+  "plainText": {
+    "useRawBody": true,
+    "rawBody": "This is plain text, not JSON",
+    "contentType": "text/plain",
+    "statusCode": 200
+  },
+  "html": {
+    "useRawBody": true,
+    "rawBody": "<html><body>Error</body></html>",
+    "contentType": "text/html",
+    "statusCode": 200
+  },
+  "missingUserKey": {
+    "body": { "token": "abc123", "expires_in": 3600 }
+  },
+  "emptyBody": {
+    "body": {}
+  },
+  "withUserKey": {
+    "body": { "user": "john", "token": "xyz789" }
+  },
+  "userWithTokenAndExpiry": {
+    "body": { "user": "john", "token": "abc123xyz", "expires_in": 3600 }
+  },
+  "userWithProfile": {
+    "body": { "user": "jane", "name": "Jane", "role": "admin", "active": true }
+  },
+  "userOnly": {
+    "body": { "user": "only-user" }
+  }
+}

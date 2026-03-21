@@ -1,0 +1,13 @@
+{
+  "validLogin": { "user": 40, "password": "12345" },
+  "plainTextBody": "not a json",
+  "malformedJson": "{\"user\": 40, broken}",
+  "missingUserKey": { "password": "12345" },
+  "emptyObject": {},
+  "noUserMultipleKeys": { "username": "john", "password": "secret", "role": "admin" },
+  "userStringValue": { "user": "john", "password": "12345" },
+  "userNullValue": { "user": null },
+  "minimalUser": { "user": 1 },
+  "userNumericId": { "user": 40 },
+  "userWithExtra": { "user": 40, "password": "12345", "extra": "data" }
+}
