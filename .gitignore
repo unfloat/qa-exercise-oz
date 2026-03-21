@@ -11,3 +11,7 @@ wheels/
 
 # Node
 node_modules/
+
+# Cypress artifacts
+tests/cypress/screenshots/
+tests/cypress/videos/
